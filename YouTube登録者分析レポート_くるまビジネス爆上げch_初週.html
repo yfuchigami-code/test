@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube登録者分析レポート｜くるまビジネス爆上げch（初週）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--pg-navy:#123770;--pg-navy-deep:#0d2a54;--pg-turquoise:#00b6c9;--pg-orange:#fa7748;--pg-gray:#d8d8d8;--bg:#f6f8fa;--tx:#22303f;--mut:#6b7a8c}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+body{font-family:'Noto Sans JP',system-ui,sans-serif;color:var(--tx);background:var(--bg);line-height:1.7;font-size:15px}
+a{color:var(--pg-navy)}
+header{background:var(--pg-navy);color:#fff;padding:32px 0 26px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header h1{margin:0 0 6px;font-size:26px;font-weight:700;letter-spacing:.02em}
+header .sub{font-size:15px;opacity:.92}
+header .metaline{margin-top:14px;font-size:13px;opacity:.82;border-top:1px solid rgba(255,255,255,.25);padding-top:10px}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 60px}
+section{background:#fff;border:1px solid #e3e8ee;border-radius:8px;padding:22px 22px 26px;margin-bottom:22px}
+h2{font-size:19px;margin:0 0 4px;color:var(--pg-navy);border-left:4px solid var(--pg-turquoise);padding-left:10px}
+h2 .no{font-size:12px;color:var(--mut);display:block;font-weight:500;margin-bottom:2px}
+h3{font-size:15px;margin:22px 0 8px;color:var(--pg-navy-deep)}
+p{margin:8px 0}
+.lead{color:var(--mut);font-size:13.5px;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.kpi{border:1px solid #e3e8ee;border-radius:6px;padding:12px 14px;background:#fbfcfd}
+.kpi .k{font-size:12px;color:var(--mut)}
+.kpi .v{font-size:22px;font-weight:700;color:var(--pg-navy);line-height:1.3}
+.kpi .v small{font-size:13px;font-weight:500;color:var(--mut)}
+.split{display:flex;flex-wrap:wrap;gap:20px}
+.split>div{flex:1 1 320px;min-width:0}
+.bar{display:grid;grid-template-columns:minmax(90px,140px) 1fr minmax(88px,auto);gap:10px;align-items:center;margin:5px 0;font-size:13px}
+.bl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{background:#eef1f5;border-radius:3px;height:14px;overflow:hidden}
+.bf{background:var(--pg-turquoise);height:100%}
+.bv{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border-bottom:1px solid #e8ecf1;padding:7px 6px;text-align:left;vertical-align:top}
+thead th{background:var(--pg-navy);color:#fff;font-weight:500;font-size:11.5px;white-space:nowrap;line-height:1.35}
+table.st thead th{cursor:pointer;user-select:none}
+table.st thead th:hover{background:var(--pg-navy-deep)}
+table.st thead th.asc::after{content:'\25B2';margin-left:4px;font-size:9px}
+table.st thead th.desc::after{content:'\25BC';margin-left:4px;font-size:9px}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.nw{white-space:nowrap}
+td.hi{color:var(--pg-navy);font-weight:700}
+td.ttl{min-width:170px}
+td.ttl a{text-decoration:none}
+td.ttl a:hover{text-decoration:underline}
+tbody tr:hover{background:#f2fbfc}
+.tag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid var(--pg-gray);color:var(--mut)}
+.tag.s{border-color:var(--pg-orange);color:var(--pg-orange)}
+.tag.l{border-color:var(--pg-turquoise);color:#0a8f9e}
+.dist{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:12px}
+.dist div{border:1px solid #e3e8ee;border-radius:6px;padding:10px 12px;text-align:center;background:#fbfcfd}
+.dist b{display:block;font-size:21px;color:var(--pg-navy)}
+.dist span{font-size:12px;color:var(--mut)}
+ol.steps{padding-left:20px;margin:10px 0}
+ol.steps>li{margin-bottom:12px}
+ol.steps b{color:var(--pg-navy-deep)}
+.card{border:1px solid #e3e8ee;border-radius:6px;padding:14px 16px;margin-bottom:12px;background:#fbfcfd}
+.card h4{margin:0 0 4px;font-size:14px}
+.card h4 a{text-decoration:none}
+.card .meta{margin:0 0 8px;font-size:12.5px;color:var(--mut)}
+.curve{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.curve span{border:1px solid #e3e8ee;border-radius:4px;padding:3px 8px;background:#fff;font-size:12px}
+.curve i{font-style:normal;color:var(--mut);margin-right:6px}
+.curve b{color:var(--pg-navy)}
+ul.rise{margin:6px 0 0;padding-left:18px;font-size:13px}
+ul.rise li{margin:2px 0}
+.note{font-size:12.5px;color:var(--mut);background:#fbfcfd;border-left:3px solid var(--pg-gray);padding:8px 12px;margin:10px 0}
+.warn{border-left-color:var(--pg-orange);color:#8a4520;background:#fff7f3}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+@media(max-width:560px){
+ body{font-size:14px}
+ header{padding:22px 0 20px}
+ header h1{font-size:20px}
+ .wrap,main{padding-left:12px;padding-right:12px}
+ main{padding-top:16px;padding-bottom:40px}
+ section{padding:16px 14px 20px}
+ h2{font-size:17px}
+ .bar{grid-template-columns:minmax(76px,104px) 1fr auto;font-size:12px}
+ .kpi .v{font-size:19px}
+ table{font-size:11.5px}
+ td.ttl{min-width:150px}
+}
+</style></head><body>
+<header><div class="wrap"><h1>YouTube 登録者分析レポート</h1><div class="sub">くるまビジネス爆上げch（立ち上げ初週）</div>
+<div class="metaline">対象期間：2026/9/29〜2026/10/26（過去28日。開設10/20、初回公開10/23）　／　作成：2026年10月27日　／　ピュアグロース株式会社</div></div></header>
+<main><section>
+<h2><span class="no">SECTION 01</span>前提 — 立ち上げ初週の登録者と視聴</h2>
+<p class="lead">期間：2026/9/29〜10/26（過去28日。実質は10/23公開から）。YouTube Studioの概要画面より。</p>
+<div class="kpis"><div class="kpi"><div class="k">登録者 純増</div><div class="v">110<small>人</small></div></div><div class="kpi"><div class="k">総視聴回数</div><div class="v">2,906<small>回</small></div></div><div class="kpi"><div class="k">総再生時間</div><div class="v">64.3<small>時間</small></div></div><div class="kpi"><div class="k">投稿本数</div><div class="v">2<small>本（長尺2／ショート0）</small></div></div><div class="kpi"><div class="k">視聴あたり登録</div><div class="v">3.8<small>%</small></div></div></div><p>チャンネル開設は2026/10/20、初回の動画公開は10/23です。公開から約4日で<b>視聴2,906回・登録+110人</b>。登録者の現在値は112人です（リアルタイム表示）。</p>
+<p class="note">比較用：整骨院チャンネルの365日累計は、視聴28万回に対し登録785人（視聴あたり0.28%）。今回の3.8%は約13倍ですが、立ち上げ直後は<b>社内・既存の人脈からの登録</b>が混ざるため、一般視聴者の転換率としては読めません。</p>
+<p class="note">公開データ（vidIQ）では、10/23時点で再生0・登録55人でした。動画の視聴より前に登録が集まっているため、<b>登録の多くは動画外（告知・チャンネルページ経由）</b>と推測されます。流入元の画面で確認が必要です。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 02</span>動画別の初動</h2>
+<p class="lead">開設後に公開した2本の長尺。列見出しをクリックすると並べ替わります。</p>
+<div class="tw"><table class="st" id="mt"><thead><tr><th data-t="n">#</th><th data-t="s">タイトル</th><th data-t="d">公開</th><th data-t="s">種別</th><th data-t="t">長さ</th><th data-t="m">視聴<br>（期間内）</th><th data-t="s">平均視聴時間<br>（視聴率）</th><th data-t="m">登録者</th><th data-t="p">CTR</th><th data-t="p">高評価率<br>（公開値）</th></tr></thead><tbody><tr><td class="num">1</td><td class="ttl"><a href="https://youtu.be/08LAToEN3fk" target="_blank" rel="noopener">ネクステージ・ガリバーはなぜ強い？元船井総研コンサルが教える中古車販売店の勝ち筋</a></td><td class="num nw">26/10/23</td><td class="nw"><span class="tag l">長尺</span></td><td class="num nw">14:07</td><td class="num hi">2,626</td><td class="num nw">2:55（20.8%）</td><td class="num">—</td><td class="num">—</td><td class="num">1.66%</td></tr>
+<tr><td class="num">2</td><td class="ttl"><a href="https://youtu.be/44lK8XBWIqg" target="_blank" rel="noopener">【緊急】カーセンサーに不正アクセス｜中古車販売店が今日・今週・今月やるべきこと</a></td><td class="num nw">26/10/26</td><td class="nw"><span class="tag l">長尺</span></td><td class="num nw">15:39</td><td class="num hi">280</td><td class="num nw">2:25（15.5%）</td><td class="num">—</td><td class="num">10.1%</td><td class="num">3.89%</td></tr></tbody></table></div>
+<p class="note">視聴・平均視聴時間はYouTube Studio（〜10/26）、CTRは動画公開後1日20時間の値、高評価率はvidIQ公開データ（10/27時点：46/2,771、16/411）です。登録者とインプレッションは動画別の画面が未取得です。</p>
+<p>《ネクステージ・ガリバー》が視聴の<b>90%</b>（2,626/2,906）を占めます。公開が3日早く、リアルタイム画面でも過去48時間で1,306回を伸ばしています。《カーセンサー》は公開4日目の時点で、初動のCTRが<b>10.1%</b>と高い水準です（整骨院の上位動画は8〜13%）。ただし初動のCTRはインプレッションが少ない時期の値で、変動します。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 03</span>現時点で見える型（仮説）</h2>
+<p class="lead">整骨院版で効いていた型との対応。</p>
+<ol class="steps">
+<li><b>型A：大手企業の勝ち筋解説</b><br>《ネクステージ・ガリバーはなぜ強い？》は、整骨院チャンネルの《業界大手企業を解説》（視聴1,591・登録11）と同じ型です。企業名と「元船井総研コンサル」の肩書が、検索と信頼の両方に効きます。</li>
+<li><b>型B：業界ニュースへの速報対応</b><br>《【緊急】カーセンサーに不正アクセス》は、整骨院で登録90人と最大だった《【業界最速】療養費検討委員会》と同じ「時事の一次情報」型です。ニュースの当日〜翌日に出す設計が前提になります。</li>
+<li><b>視聴者像：中古車販売店の経営者・店長</b><br>テーマは「中古車販売店が今日やるべきこと」「勝ち筋」と、経営者向けです。一般の車好き向け新車レビュー（SECTION 05の型）とは別の市場なので、再生の絶対数は小さくなる前提で見るのが適切です。</li>
+</ol>
+<p class="note warn">所見は2本・約4日分のデータからの仮説です。型の優劣の判断は、動画別の登録者数と、あと数本の公開結果が出るまで保留してください。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 04</span>未取得の指標と次に必要な画面</h2>
+<p class="lead">整骨院版にある項目のうち、今回の画面では確認できなかったもの。</p>
+<div class="tw"><table><thead><tr><th>項目</th><th>状況</th><th>必要なStudioの画面</th></tr></thead><tbody>
+<tr><td>動画別の登録者数・インプレッション</td><td>未取得</td><td>アナリティクス → コンテンツ → 動画一覧（「登録者」「インプレッション」「CTR」の列）</td></tr>
+<tr><td>動画に紐づく登録／動画外の登録</td><td>未取得</td><td>アナリティクス → 詳細モード → 登録者 →「登録元」</td></tr>
+<tr><td>流入経路・検索キーワード</td><td>未取得</td><td>詳細モード →「トラフィックソース」と「YouTube検索」</td></tr>
+<tr><td>視聴者の年齢・性別</td><td>未取得</td><td>アナリティクス →「視聴者」タブ</td></tr>
+<tr><td>視聴維持率カーブ</td><td>未取得</td><td>各動画の分析 →「エンゲージメント」タブ（2本とも）</td></tr>
+<tr><td>広告／オーガニックの内訳</td><td>未取得</td><td>広告を回している場合のみ。回していなければ全て自然流入として扱います</td></tr>
+</tbody></table></div>
+<p>上の画面を撮って送っていただければ、SECTION 02を動画別の登録者入りに更新し、流入・年齢・維持率の章を追加して、整骨院版と同じ10セクションに仕上げます。</p>
+</section>
+</main>
+<footer>ピュアグロース株式会社／YouTube Studio・vidIQ公開データより作成（2026年10月27日）</footer>
+<script>
+(function(){
+ var tbs=document.querySelectorAll('table.st');
+ function val(td,type){
+  var s=td.textContent.trim();
+  if(type==='s') return s;
+  if(type==='d'){var p=s.split('/');return p.length===3?(2000+ +p[0])*10000+(+p[1])*100+(+p[2]):0}
+  if(type==='t'){var q=s.split(':');return q.length===3?(+q[0])*3600+(+q[1])*60+(+q[2]):(+q[0])*60+(+q[1])}
+  if(type==='p'||type==='n') return parseFloat(s)||0;
+  var m=s.replace(/,/g,'');
+  if(m.indexOf('億')>=0) return parseFloat(m)*100000000;
+  if(m.indexOf('万')>=0) return parseFloat(m)*10000;
+  return parseFloat(m)||0;
+ }
+ Array.prototype.forEach.call(tbs,function(tb){
+  var ths=tb.querySelectorAll('thead th'), tbody=tb.querySelector('tbody');
+  Array.prototype.forEach.call(ths,function(th,i){
+   th.addEventListener('click',function(){
+    var type=th.getAttribute('data-t')||'m';
+    var asc=!th.classList.contains('asc');
+    Array.prototype.forEach.call(ths,function(o){o.classList.remove('asc','desc')});
+    th.classList.add(asc?'asc':'desc');
+    var rows=Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+    rows.sort(function(a,b){
+     var x=val(a.cells[i],type), y=val(b.cells[i],type);
+     if(type==='s') return asc? String(x).localeCompare(String(y),'ja') : String(y).localeCompare(String(x),'ja');
+     return asc? x-y : y-x;
+    });
+    rows.forEach(function(r){tbody.appendChild(r)});
+   });
+  });
+ });
+})();
+</script></body></html>
