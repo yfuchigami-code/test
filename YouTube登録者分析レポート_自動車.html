@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube登録者分析レポート｜自動車</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--pg-navy:#123770;--pg-navy-deep:#0d2a54;--pg-turquoise:#00b6c9;--pg-orange:#fa7748;--pg-gray:#d8d8d8;--bg:#f6f8fa;--tx:#22303f;--mut:#6b7a8c}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+body{font-family:'Noto Sans JP',system-ui,sans-serif;color:var(--tx);background:var(--bg);line-height:1.7;font-size:15px}
+a{color:var(--pg-navy)}
+header{background:var(--pg-navy);color:#fff;padding:32px 0 26px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header h1{margin:0 0 6px;font-size:26px;font-weight:700;letter-spacing:.02em}
+header .sub{font-size:15px;opacity:.92}
+header .metaline{margin-top:14px;font-size:13px;opacity:.82;border-top:1px solid rgba(255,255,255,.25);padding-top:10px}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 60px}
+section{background:#fff;border:1px solid #e3e8ee;border-radius:8px;padding:22px 22px 26px;margin-bottom:22px}
+h2{font-size:19px;margin:0 0 4px;color:var(--pg-navy);border-left:4px solid var(--pg-turquoise);padding-left:10px}
+h2 .no{font-size:12px;color:var(--mut);display:block;font-weight:500;margin-bottom:2px}
+h3{font-size:15px;margin:22px 0 8px;color:var(--pg-navy-deep)}
+p{margin:8px 0}
+.lead{color:var(--mut);font-size:13.5px;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.kpi{border:1px solid #e3e8ee;border-radius:6px;padding:12px 14px;background:#fbfcfd}
+.kpi .k{font-size:12px;color:var(--mut)}
+.kpi .v{font-size:22px;font-weight:700;color:var(--pg-navy);line-height:1.3}
+.kpi .v small{font-size:13px;font-weight:500;color:var(--mut)}
+.split{display:flex;flex-wrap:wrap;gap:20px}
+.split>div{flex:1 1 320px;min-width:0}
+.bar{display:grid;grid-template-columns:minmax(90px,140px) 1fr minmax(88px,auto);gap:10px;align-items:center;margin:5px 0;font-size:13px}
+.bl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{background:#eef1f5;border-radius:3px;height:14px;overflow:hidden}
+.bf{background:var(--pg-turquoise);height:100%}
+.bv{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border-bottom:1px solid #e8ecf1;padding:7px 6px;text-align:left;vertical-align:top}
+thead th{background:var(--pg-navy);color:#fff;font-weight:500;font-size:11.5px;white-space:nowrap;line-height:1.35}
+table.st thead th{cursor:pointer;user-select:none}
+table.st thead th:hover{background:var(--pg-navy-deep)}
+table.st thead th.asc::after{content:'\25B2';margin-left:4px;font-size:9px}
+table.st thead th.desc::after{content:'\25BC';margin-left:4px;font-size:9px}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.nw{white-space:nowrap}
+td.hi{color:var(--pg-navy);font-weight:700}
+td.ttl{min-width:170px}
+td.ttl a{text-decoration:none}
+td.ttl a:hover{text-decoration:underline}
+tbody tr:hover{background:#f2fbfc}
+.tag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid var(--pg-gray);color:var(--mut)}
+.tag.s{border-color:var(--pg-orange);color:var(--pg-orange)}
+.tag.l{border-color:var(--pg-turquoise);color:#0a8f9e}
+.dist{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:12px}
+.dist div{border:1px solid #e3e8ee;border-radius:6px;padding:10px 12px;text-align:center;background:#fbfcfd}
+.dist b{display:block;font-size:21px;color:var(--pg-navy)}
+.dist span{font-size:12px;color:var(--mut)}
+ol.steps{padding-left:20px;margin:10px 0}
+ol.steps>li{margin-bottom:12px}
+ol.steps b{color:var(--pg-navy-deep)}
+.card{border:1px solid #e3e8ee;border-radius:6px;padding:14px 16px;margin-bottom:12px;background:#fbfcfd}
+.card h4{margin:0 0 4px;font-size:14px}
+.card h4 a{text-decoration:none}
+.card .meta{margin:0 0 8px;font-size:12.5px;color:var(--mut)}
+.curve{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.curve span{border:1px solid #e3e8ee;border-radius:4px;padding:3px 8px;background:#fff;font-size:12px}
+.curve i{font-style:normal;color:var(--mut);margin-right:6px}
+.curve b{color:var(--pg-navy)}
+ul.rise{margin:6px 0 0;padding-left:18px;font-size:13px}
+ul.rise li{margin:2px 0}
+.note{font-size:12.5px;color:var(--mut);background:#fbfcfd;border-left:3px solid var(--pg-gray);padding:8px 12px;margin:10px 0}
+.warn{border-left-color:var(--pg-orange);color:#8a4520;background:#fff7f3}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+@media(max-width:560px){
+ body{font-size:14px}
+ header{padding:22px 0 20px}
+ header h1{font-size:20px}
+ .wrap,main{padding-left:12px;padding-right:12px}
+ main{padding-top:16px;padding-bottom:40px}
+ section{padding:16px 14px 20px}
+ h2{font-size:17px}
+ .bar{grid-template-columns:minmax(76px,104px) 1fr auto;font-size:12px}
+ .kpi .v{font-size:19px}
+ table{font-size:11.5px}
+ td.ttl{min-width:150px}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>YouTube 登録者分析レポート</h1>
+<div class="sub">自動車ジャンル チャンネル（日本）</div>
+<div class="metaline">対象：登録者10万人以上の国内自動車系 28チャンネル　／　取得日：2026年10月27日（過去365日の集計を含む）　／　データ：vidIQ公開データ　／　ピュアグロース株式会社</div>
+</div></header>
+<main>
+<section>
+<h2><span class="no">SECTION 01</span>前提 — ジャンルの規模と構造</h2>
+<p class="lead">日本の自動車系チャンネルの規模、長尺とショートの役割分担を押さえます。</p>
+<div class="kpis"><div class="kpi"><div class="k">対象チャンネル</div><div class="v">28<small>ch</small></div></div><div class="kpi"><div class="k">登録者 合計</div><div class="v">832万<small>人</small></div></div><div class="kpi"><div class="k">生涯再生 合計</div><div class="v">54.7億<small>回</small></div></div><div class="kpi"><div class="k">過去1年の再生</div><div class="v">7.2億<small>回</small></div></div><div class="kpi"><div class="k">1年登録者増加率（中央値）</div><div class="v">6.0<small>%</small></div></div><div class="kpi"><div class="k">長尺の平均尺（中央値）</div><div class="v">20分<small></small></div></div></div><h3>① 過去1年の再生 — 長尺とショート</h3><div class="split"><div><div class="bar"><div class="bl" title="長尺">長尺</div><div class="bt"><div class="bf" style="width:100.0%"></div></div><div class="bv">4.0億回（55.3%）</div></div><div class="bar"><div class="bl" title="ショート">ショート</div><div class="bt"><div class="bf" style="width:80.9%"></div></div><div class="bv">3.2億回（44.7%）</div></div></div></div><p>過去1年の再生は長尺<b>55%</b>・ショート<b>45%</b>。ただしショート再生の<b>62%</b>は「ゆっくりダークネット」1チャンネルが占めます。同チャンネルを除くと、ショートは980本で1.2億回、1本あたり<b>12.5万回</b>と、長尺（14.0万回）とほぼ同水準です。</p><h3>② 長尺とショートの規模感</h3><div class="tw"><table>
+<thead><tr><th>種別</th><th>投稿本数（1年）</th><th>再生回数（1年）</th><th>1本あたり再生</th><th>1本あたり再生（長尺比）</th></tr></thead>
+<tbody>
+<tr><td class="nw">長尺（91秒〜）</td><td class="num">2,849</td><td class="num">4.0億</td><td class="num hi">13.9万</td><td class="num">1.0倍</td></tr>
+<tr><td class="nw">ショート（〜90秒）</td><td class="num">1,341</td><td class="num">3.2億</td><td class="num hi">24.0万</td><td class="num">1.72倍</td></tr>
+</tbody></table></div><p class="note">長尺・ショートの集計は、公式チャンネル（トヨタ）と、本数の集計に欠損があるCARPRIME・車選びドットコムを除く25チャンネルが対象です。1年登録者増加率の中央値は全28チャンネルで算出しています。</p><p class="note warn">選定条件：vidIQで「自動車」系・日本語・国内拠点・最終投稿が2026/9/1以降のチャンネルを登録者順に上位から取得し、バイク・ガジェット中心のチャンネルを除いた28件です。ジャンル全体の網羅ではありません。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 02</span>登録者の規模分布と成長スピード</h2>
+<p class="lead">どの規模帯にチャンネルが集まっているか、直近1年でどこが伸びているか。</p>
+<div class="dist"><div><b>1</b><span>100万人以上<br>全体の3.6%</span></div><div><b>3</b><span>50〜100万人<br>全体の10.7%</span></div><div><b>4</b><span>30〜50万人<br>全体の14.3%</span></div><div><b>6</b><span>20〜30万人<br>全体の21.4%</span></div><div><b>14</b><span>10〜20万人<br>全体の50.0%</span></div></div><p>100万人超は<b>1チャンネル</b>（ワンソクTube）。30万人以上でも<b>8チャンネル</b>に絞られ、10〜20万人帯が<b>14チャンネル</b>と最も厚い構造です。</p><h3>1年間の登録者増加率 TOP10</h3><div class="bar"><div class="bl" title="GOOD CARLIFE/ゼミッタ">GOOD CARLIFE/ゼミッタ</div><div class="bt"><div class="bf" style="width:100.0%"></div></div><div class="bv">+16.7%（再生 +27.5%）</div></div><div class="bar"><div class="bl" title="高橋巨樹のガレージライフ">高橋巨樹のガレージライフ</div><div class="bt"><div class="bf" style="width:96.0%"></div></div><div class="bv">+16.0%（再生 +30.4%）</div></div><div class="bar"><div class="bl" title="ピットワン">ピットワン</div><div class="bt"><div class="bf" style="width:72.7%"></div></div><div class="bv">+12.1%（再生 +33.2%）</div></div><div class="bar"><div class="bl" title="CARPRIME">CARPRIME</div><div class="bt"><div class="bf" style="width:70.5%"></div></div><div class="bv">+11.8%（再生 +59.1%）</div></div><div class="bar"><div class="bl" title="CGオンエア">CGオンエア</div><div class="bt"><div class="bf" style="width:67.8%"></div></div><div class="bv">+11.3%（再生 +33.0%）</div></div><div class="bar"><div class="bl" title="ワックスウォッシュ">ワックスウォッシュ</div><div class="bt"><div class="bf" style="width:61.6%"></div></div><div class="bv">+10.3%（再生 +44.7%）</div></div><div class="bar"><div class="bl" title="ながら洗車">ながら洗車</div><div class="bt"><div class="bf" style="width:61.0%"></div></div><div class="bv">+10.2%（再生 +103.2%）</div></div><div class="bar"><div class="bl" title="車選びドットコム">車選びドットコム</div><div class="bt"><div class="bf" style="width:60.8%"></div></div><div class="bv">+10.1%（再生 +27.7%）</div></div><div class="bar"><div class="bl" title="枯れた整備士ひでぽん">枯れた整備士ひでぽん</div><div class="bt"><div class="bf" style="width:56.9%"></div></div><div class="bv">+9.5%（再生 +25.9%）</div></div><div class="bar"><div class="bl" title="カミタケ チャンネル">カミタケ チャンネル</div><div class="bt"><div class="bf" style="width:56.4%"></div></div><div class="bv">+9.4%（再生 +29.9%）</div></div><p>伸びが速いのは<b>GOOD CARLIFE/ゼミッタ（+16.7%）、高橋巨樹のガレージライフ（+16.0%）、ピットワン（+12.1%）</b>。上位10件のうち<b>整備・販売店（現場）系が4件</b>、新車レビュー系が1件を占め、登録者が最大の100万人超ワンソクTubeの増加率は+2.05%に留まります。<b>規模が大きいほど増加率が鈍る</b>のはこのジャンルでも同じです。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 03</span>チャンネル一覧（登録者順）</h2>
+<p class="lead">列見出しをクリックすると昇順／降順で並べ替わります。数値は万・億単位表記。</p>
+<div class="tw"><table id="mt" class="st">
+<thead><tr><th data-t="n">#</th><th data-t="s">チャンネル</th><th data-t="s">タイプ</th><th data-t="m">登録者</th><th data-t="m">生涯<br>再生</th><th data-t="m">総動画数</th><th data-t="m">1本あたり<br>平均再生</th><th data-t="m">1年の<br>再生</th><th data-t="p">登録者<br>1年増加率</th><th data-t="p">再生<br>1年増加率</th><th data-t="m">長尺<br>（1年）</th><th data-t="m">ショート<br>（1年）</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td>
+<td class="ttl"><a href="https://www.youtube.com/@wansokutube" target="_blank" rel="noopener">ワンソクTube</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">149万</td><td class="num">5.1億</td><td class="num">3,394</td><td class="num">15.0万</td>
+<td class="num">8,829万</td><td class="num">+2.0%</td><td class="num">+22.4%</td>
+<td class="num">352</td><td class="num">24</td></tr>
+<tr><td class="num">2</td>
+<td class="ttl"><a href="https://www.youtube.com/@yukkuri_dark_net" target="_blank" rel="noopener">ゆっくりダークネット</a></td>
+<td class="nw"><span class="tag l">解説・ショート特化</span></td>
+<td class="num hi">65.2万</td><td class="num">6.7億</td><td class="num">1,730</td><td class="num">38.9万</td>
+<td class="num">2.0億</td><td class="num">+1.7%</td><td class="num">+41.2%</td>
+<td class="num">39</td><td class="num">361</td></tr>
+<tr><td class="num">3</td>
+<td class="ttl"><a href="https://www.youtube.com/@lovecars" target="_blank" rel="noopener">LOVECARS!TV!</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">62.0万</td><td class="num">6.4億</td><td class="num">4,896</td><td class="num">13.0万</td>
+<td class="num">7,431万</td><td class="num">+6.3%</td><td class="num">+13.7%</td>
+<td class="num">386</td><td class="num">95</td></tr>
+<tr><td class="num">4</td>
+<td class="ttl"><a href="https://www.youtube.com/@videooption" target="_blank" rel="noopener">VIDEO OPTION</a></td>
+<td class="nw"><span class="tag l">モータースポーツ・メディア系</span></td>
+<td class="num hi">50.3万</td><td class="num">4.1億</td><td class="num">3,701</td><td class="num">11.0万</td>
+<td class="num">3,573万</td><td class="num">+5.0%</td><td class="num">+10.1%</td>
+<td class="num">90</td><td class="num">71</td></tr>
+<tr><td class="num">5</td>
+<td class="ttl"><a href="https://www.youtube.com/@carwowjapan" target="_blank" rel="noopener">carwow 日本語</a></td>
+<td class="nw"><span class="tag l">メディア・公式系</span></td>
+<td class="num hi">46.9万</td><td class="num">2.7億</td><td class="num">1,068</td><td class="num">25.7万</td>
+<td class="num">3,139万</td><td class="num">+2.6%</td><td class="num">+13.6%</td>
+<td class="num">98</td><td class="num">40</td></tr>
+<tr><td class="num">6</td>
+<td class="ttl"><a href="https://www.youtube.com/@cacaca_car" target="_blank" rel="noopener">車の大辞典cacaca</a></td>
+<td class="nw"><span class="tag l">解説・ショート特化</span></td>
+<td class="num hi">44.8万</td><td class="num">2.4億</td><td class="num">1,014</td><td class="num">23.6万</td>
+<td class="num">1,750万</td><td class="num">+0.0%</td><td class="num">+8.2%</td>
+<td class="num">32</td><td class="num">24</td></tr>
+<tr><td class="num">7</td>
+<td class="ttl"><a href="https://www.youtube.com/@nob2020" target="_blank" rel="noopener">NOBチャンネル</a></td>
+<td class="nw"><span class="tag l">モータースポーツ・メディア系</span></td>
+<td class="num hi">38.4万</td><td class="num">1.4億</td><td class="num">499</td><td class="num">27.5万</td>
+<td class="num">2,041万</td><td class="num">+4.9%</td><td class="num">+19.1%</td>
+<td class="num">52</td><td class="num">1</td></tr>
+<tr><td class="num">8</td>
+<td class="ttl"><a href="https://www.youtube.com/@kurumaerabicom" target="_blank" rel="noopener">車選びドットコム</a></td>
+<td class="nw"><span class="tag l">メディア・公式系</span></td>
+<td class="num hi">30.4万</td><td class="num">2.1億</td><td class="num">607</td><td class="num">33.9万</td>
+<td class="num">4,190万</td><td class="num">+10.1%</td><td class="num">+27.7%</td>
+<td class="num">1※</td><td class="num">8※</td></tr>
+<tr><td class="num">9</td>
+<td class="ttl"><a href="https://www.youtube.com/@toyotajpchannel" target="_blank" rel="noopener">トヨタ YouTubeショールーム</a></td>
+<td class="nw"><span class="tag l">メディア・公式系</span></td>
+<td class="num hi">29.2万</td><td class="num">4.8億</td><td class="num">427</td><td class="num">113万</td>
+<td class="num">3.5億</td><td class="num">+2.5%</td><td class="num">+202.9%</td>
+<td class="num">55※</td><td class="num">43※</td></tr>
+<tr><td class="num">10</td>
+<td class="ttl"><a href="https://www.youtube.com/@carprimeofficial" target="_blank" rel="noopener">CARPRIME</a></td>
+<td class="nw"><span class="tag l">メディア・公式系</span></td>
+<td class="num hi">26.6万</td><td class="num">1.6億</td><td class="num">2,609</td><td class="num">6.3万</td>
+<td class="num">5,919万</td><td class="num">+11.8%</td><td class="num">+59.1%</td>
+<td class="num">1※</td><td class="num">1,398※</td></tr>
+<tr><td class="num">11</td>
+<td class="ttl"><a href="https://www.youtube.com/@pitone0701" target="_blank" rel="noopener">ピットワン</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">25.9万</td><td class="num">1.2億</td><td class="num">885</td><td class="num">13.8万</td>
+<td class="num">2,921万</td><td class="num">+12.1%</td><td class="num">+33.2%</td>
+<td class="num">112</td><td class="num">39</td></tr>
+<tr><td class="num">12</td>
+<td class="ttl"><a href="https://www.youtube.com/@loperaiochannel" target="_blank" rel="noopener">L&#x27;OPERAIO Channel</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">23.8万</td><td class="num">1.9億</td><td class="num">1,357</td><td class="num">14.0万</td>
+<td class="num">1,531万</td><td class="num">+1.3%</td><td class="num">+8.8%</td>
+<td class="num">64</td><td class="num">74</td></tr>
+<tr><td class="num">13</td>
+<td class="ttl"><a href="https://www.youtube.com/@hunter_channel" target="_blank" rel="noopener">ハンターチャンネル</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">22.3万</td><td class="num">8,776万</td><td class="num">288</td><td class="num">30.5万</td>
+<td class="num">1,252万</td><td class="num">+6.7%</td><td class="num">+17.7%</td>
+<td class="num">36</td><td class="num">0</td></tr>
+<tr><td class="num">14</td>
+<td class="ttl"><a href="https://www.youtube.com/@msgarage1010" target="_blank" rel="noopener">M&#x27;sGarage Osapy</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">21.0万</td><td class="num">2.2億</td><td class="num">3,020</td><td class="num">7.4万</td>
+<td class="num">729万</td><td class="num">+1.9%</td><td class="num">+3.6%</td>
+<td class="num">191</td><td class="num">44</td></tr>
+<tr><td class="num">15</td>
+<td class="ttl"><a href="https://www.youtube.com/@nagaracarwash" target="_blank" rel="noopener">ながら洗車</a></td>
+<td class="nw"><span class="tag l">洗車・カーケア系</span></td>
+<td class="num hi">19.5万</td><td class="num">7,158万</td><td class="num">734</td><td class="num">9.8万</td>
+<td class="num">3,249万</td><td class="num">+10.2%</td><td class="num">+103.2%</td>
+<td class="num">66</td><td class="num">203</td></tr>
+<tr><td class="num">16</td>
+<td class="ttl"><a href="https://www.youtube.com/@kamitakechannel9456" target="_blank" rel="noopener">カミタケ チャンネル</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">16.3万</td><td class="num">1.3億</td><td class="num">810</td><td class="num">16.0万</td>
+<td class="num">2,933万</td><td class="num">+9.4%</td><td class="num">+29.9%</td>
+<td class="num">100</td><td class="num">66</td></tr>
+<tr><td class="num">17</td>
+<td class="ttl"><a href="https://www.youtube.com/@goodcarlifech" target="_blank" rel="noopener">GOOD CARLIFE/ゼミッタ</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">16.1万</td><td class="num">1.4億</td><td class="num">1,487</td><td class="num">9.4万</td>
+<td class="num">2,926万</td><td class="num">+16.7%</td><td class="num">+27.5%</td>
+<td class="num">232</td><td class="num">0</td></tr>
+<tr><td class="num">18</td>
+<td class="ttl"><a href="https://www.youtube.com/@wax-wash" target="_blank" rel="noopener">ワックスウォッシュ</a></td>
+<td class="nw"><span class="tag l">洗車・カーケア系</span></td>
+<td class="num hi">16.1万</td><td class="num">6,943万</td><td class="num">268</td><td class="num">25.9万</td>
+<td class="num">2,049万</td><td class="num">+10.3%</td><td class="num">+44.7%</td>
+<td class="num">16</td><td class="num">27</td></tr>
+<tr><td class="num">19</td>
+<td class="ttl"><a href="https://www.youtube.com/@startyourenginesx" target="_blank" rel="noopener">StartYourEnginesX</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">15.9万</td><td class="num">1.6億</td><td class="num">3,764</td><td class="num">4.2万</td>
+<td class="num">986万</td><td class="num">+3.9%</td><td class="num">+6.8%</td>
+<td class="num">156</td><td class="num">91</td></tr>
+<tr><td class="num">20</td>
+<td class="ttl"><a href="https://www.youtube.com/@masumitu.j" target="_blank" rel="noopener">増満自動車</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">14.6万</td><td class="num">6,057万</td><td class="num">131</td><td class="num">46.2万</td>
+<td class="num">442万</td><td class="num">+2.1%</td><td class="num">+8.0%</td>
+<td class="num">10</td><td class="num">0</td></tr>
+<tr><td class="num">21</td>
+<td class="ttl"><a href="https://www.youtube.com/@yukistestdriveshow" target="_blank" rel="noopener">今井優杏の試乗しまSHOW!</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">14.3万</td><td class="num">6,159万</td><td class="num">1,039</td><td class="num">5.9万</td>
+<td class="num">1,003万</td><td class="num">+7.5%</td><td class="num">+15.8%</td>
+<td class="num">104</td><td class="num">54</td></tr>
+<tr><td class="num">22</td>
+<td class="ttl"><a href="https://www.youtube.com/@cg-on-the-air" target="_blank" rel="noopener">CGオンエア</a></td>
+<td class="nw"><span class="tag l">メディア・公式系</span></td>
+<td class="num hi">12.8万</td><td class="num">3,849万</td><td class="num">638</td><td class="num">6.0万</td>
+<td class="num">901万</td><td class="num">+11.3%</td><td class="num">+33.0%</td>
+<td class="num">93</td><td class="num">1</td></tr>
+<tr><td class="num">23</td>
+<td class="ttl"><a href="https://www.youtube.com/@hidepon" target="_blank" rel="noopener">枯れた整備士ひでぽん</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">12.7万</td><td class="num">6,755万</td><td class="num">1,475</td><td class="num">4.6万</td>
+<td class="num">1,285万</td><td class="num">+9.5%</td><td class="num">+25.9%</td>
+<td class="num">309</td><td class="num">0</td></tr>
+<tr><td class="num">24</td>
+<td class="ttl"><a href="https://www.youtube.com/@webcartop645" target="_blank" rel="noopener">WEB CARTOP</a></td>
+<td class="nw"><span class="tag l">メディア・公式系</span></td>
+<td class="num hi">12.2万</td><td class="num">8,076万</td><td class="num">963</td><td class="num">8.4万</td>
+<td class="num">154万</td><td class="num">-0.8%</td><td class="num">+2.0%</td>
+<td class="num">30</td><td class="num">0</td></tr>
+<tr><td class="num">25</td>
+<td class="ttl"><a href="https://www.youtube.com/@naoki_takahashi" target="_blank" rel="noopener">高橋巨樹のガレージライフ</a></td>
+<td class="nw"><span class="tag l">整備・販売店（現場）系</span></td>
+<td class="num hi">11.6万</td><td class="num">5,942万</td><td class="num">848</td><td class="num">7.0万</td>
+<td class="num">1,318万</td><td class="num">+16.0%</td><td class="num">+30.4%</td>
+<td class="num">97</td><td class="num">124</td></tr>
+<tr><td class="num">26</td>
+<td class="ttl"><a href="https://www.youtube.com/@ownerseye" target="_blank" rel="noopener">Owner&#x27;s Eye</a></td>
+<td class="nw"><span class="tag l">新車レビュー系</span></td>
+<td class="num hi">11.5万</td><td class="num">6,106万</td><td class="num">535</td><td class="num">11.4万</td>
+<td class="num">491万</td><td class="num">+7.5%</td><td class="num">+9.0%</td>
+<td class="num">28</td><td class="num">2</td></tr>
+<tr><td class="num">27</td>
+<td class="ttl"><a href="https://www.youtube.com/@bankakuemiko" target="_blank" rel="noopener">BANKAKUEMIKO</a></td>
+<td class="nw"><span class="tag l">解説・ショート特化</span></td>
+<td class="num hi">11.2万</td><td class="num">6,806万</td><td class="num">4,241</td><td class="num">1.6万</td>
+<td class="num">101万</td><td class="num">+0.9%</td><td class="num">+1.6%</td>
+<td class="num">110</td><td class="num">0</td></tr>
+<tr><td class="num">28</td>
+<td class="ttl"><a href="https://www.youtube.com/@gt-studio6146" target="_blank" rel="noopener">GT-studio</a></td>
+<td class="nw"><span class="tag l">解説・ショート特化</span></td>
+<td class="num hi">11.1万</td><td class="num">4,343万</td><td class="num">626</td><td class="num">6.9万</td>
+<td class="num">415万</td><td class="num">+5.7%</td><td class="num">+10.5%</td>
+<td class="num">46</td><td class="num">0</td></tr>
+</tbody></table></div><p class="note">※ 本数の集計に欠損・矛盾があるチャンネル（例：長尺1本で再生2,299万回）。再生・登録者の数字は参照可、本数は参考値です。トヨタ公式の1年再生は広告配信を含む可能性があります。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 04</span>運営タイプ別の比較</h2>
+<p class="lead">新車レビュー、整備・販売店、メディア・公式、解説ショート、洗車、モータースポーツの6タイプで比較。</p>
+<div class="tw"><table>
+<thead><tr><th>運営タイプ</th><th>ch数</th><th>登録者 合計</th><th>登録者 中央値</th><th>登録者 1年増加率（中央値）</th><th>再生 1年増加率（中央値）</th><th>ショートの再生比率</th></tr></thead>
+<tbody><tr><td class="nw"><span class="tag l">新車レビュー系</span></td><td class="num">7</td><td class="num">291万</td><td class="num">16.1万</td><td class="num hi">+6.7%</td><td class="num">+15.8%</td><td class="num">13%</td></tr><tr><td class="nw"><span class="tag l">メディア・公式系</span></td><td class="num">6</td><td class="num">158万</td><td class="num">27.9万</td><td class="num hi">+6.4%</td><td class="num">+30.4%</td><td class="num">32%</td></tr><tr><td class="nw"><span class="tag l">解説・ショート特化</span></td><td class="num">4</td><td class="num">132万</td><td class="num">28.0万</td><td class="num hi">+1.3%</td><td class="num">+9.4%</td><td class="num">91%</td></tr><tr><td class="nw"><span class="tag l">整備・販売店（現場）系</span></td><td class="num">7</td><td class="num">126万</td><td class="num">16.3万</td><td class="num hi">+9.4%</td><td class="num">+25.9%</td><td class="num">19%</td></tr><tr><td class="nw"><span class="tag l">モータースポーツ・メディア系</span></td><td class="num">2</td><td class="num">88.7万</td><td class="num">44.4万</td><td class="num hi">+5.0%</td><td class="num">+14.6%</td><td class="num">23%</td></tr><tr><td class="nw"><span class="tag l">洗車・カーケア系</span></td><td class="num">2</td><td class="num">35.6万</td><td class="num">17.8万</td><td class="num hi">+10.2%</td><td class="num">+73.9%</td><td class="num">74%</td></tr></tbody></table></div>
+<p>登録者の伸び（中央値）が最も高いのは<b>整備・販売店（現場）系</b>と<b>洗車・カーケア系</b>です。メーカーや雑誌に頼らず、現場の人が「自分の仕事・知識」を出しているチャンネルほど、いま登録者を増やしています。一方で、解説・ショート特化は再生が大きくても登録者の増加は小さい傾向です。</p>
+<p class="note">タイプ分類はチャンネル概要欄と内容から当社で判断したもので、各タイプの件数は2〜7件です。傾向の目安として見てください。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 05</span>再生を獲った動画 TOP</h2>
+<p class="lead">列見出しをクリックすると並べ替わります。登録者への転換数はYouTube Studioの非公開データのため、再生・高評価・コメントで見ています。</p>
+<h3>長尺 TOP20（サンプル3チャンネルの人気順）</h3>
+<div class="tw"><table class="st">
+<thead><tr><th data-t="n">#</th><th data-t="s">タイトル</th><th data-t="s">チャンネル</th><th data-t="d">公開</th><th data-t="t">長さ</th><th data-t="m">視聴</th><th data-t="m">高評価</th><th data-t="p">高評価率</th><th data-t="m">コメント</th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="ttl"><a href="https://youtu.be/JGDyoFr7a3U" target="_blank" rel="noopener">トヨタ 新型 ランドクルーザー250 実車詳細レビュー！ コレは欲しい！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">23/8/2</td><td class="num nw">27:31</td><td class="num hi">207万</td><td class="num">10,102</td><td class="num">0.49%</td><td class="num">662</td></tr><tr><td class="num">2</td><td class="ttl"><a href="https://youtu.be/aV7KsJUfgGs" target="_blank" rel="noopener">【ついに歴代首位陥落】日本で買える！ レクサスLM300hを内外装徹底チェック！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">20/8/15</td><td class="num nw">22:01</td><td class="num hi">195万</td><td class="num">4,963</td><td class="num">0.26%</td><td class="num">708</td></tr><tr><td class="num">3</td><td class="ttl"><a href="https://youtu.be/YvXIGQPOyZo" target="_blank" rel="noopener">【2023年再生2位】新型プリウス 内外装徹底チェック！ どこよりも詳しく</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">22/11/17</td><td class="num nw">29:37</td><td class="num hi">190万</td><td class="num">7,858</td><td class="num">0.41%</td><td class="num">1,066</td></tr><tr><td class="num">4</td><td class="ttl"><a href="https://youtu.be/8ssrD7YFXiM" target="_blank" rel="noopener">【疲れない車ランキング!】長距離でも疲れない運転しやすい車！ 過去54台購入した中でオススメの車11選</a></td><td class="nw">ワンソクTube</td><td class="num nw">23/9/29</td><td class="num nw">22:01</td><td class="num hi">176万</td><td class="num">4,815</td><td class="num">0.27%</td><td class="num">475</td></tr><tr><td class="num">5</td><td class="ttl"><a href="https://youtu.be/jdNFt-_RW6s" target="_blank" rel="noopener">トヨタ 新型 センチュリー ついに登場！ 速攻&amp;詳細チェック！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">23/9/6</td><td class="num nw">28:00</td><td class="num hi">160万</td><td class="num">8,247</td><td class="num">0.51%</td><td class="num">780</td></tr><tr><td class="num">6</td><td class="ttl"><a href="https://youtu.be/K7HLnnS7MyE" target="_blank" rel="noopener">【車中泊できるクラウン】新型クラウンエステート見てきた! 内装･外装ココが×! ココが◎!</a></td><td class="nw">ワンソクTube</td><td class="num nw">23/10/8</td><td class="num nw">21:09</td><td class="num hi">159万</td><td class="num">6,042</td><td class="num">0.38%</td><td class="num">464</td></tr><tr><td class="num">7</td><td class="ttl"><a href="https://youtu.be/kLMcCTeQ3OY" target="_blank" rel="noopener">トヨタ 新型ノア ＆ 新型ヴォクシー すべて紹介！ 47分に渡って超詳細チェック！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">22/1/13</td><td class="num nw">47:48</td><td class="num hi">153万</td><td class="num">5,845</td><td class="num">0.38%</td><td class="num">940</td></tr><tr><td class="num">8</td><td class="ttl"><a href="https://youtu.be/1vonRgsZ7sA" target="_blank" rel="noopener">妻も悶絶！師匠の大本命！新型エルグランド【ファミリーカー探しの旅】</a></td><td class="nw">ハンバーグ師匠チャンネル</td><td class="num nw">26/10/9</td><td class="num nw">29:27</td><td class="num hi">148万</td><td class="num">2,777</td><td class="num">0.19%</td><td class="num">191</td></tr><tr><td class="num">9</td><td class="ttl"><a href="https://youtu.be/Kgl72BgvH1Q" target="_blank" rel="noopener">トヨタ 新型 クラウンスポーツ 速攻チェック！ 大人気間違いなしの魅力満載な1台！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">23/4/30</td><td class="num nw">13:00</td><td class="num hi">148万</td><td class="num">7,357</td><td class="num">0.50%</td><td class="num">912</td></tr><tr><td class="num">10</td><td class="ttl"><a href="https://youtu.be/iCmre0Fgrqg" target="_blank" rel="noopener">はっちーが欲しがってたファミリーカーで突然登場してみた【サプライズ納車】</a></td><td class="nw">ハンバーグ師匠チャンネル</td><td class="num nw">26/1/30</td><td class="num nw">15:46</td><td class="num hi">144万</td><td class="num">10,669</td><td class="num">0.74%</td><td class="num">647</td></tr><tr><td class="num">11</td><td class="ttl"><a href="https://youtu.be/pSEwJCPtxhc" target="_blank" rel="noopener">【登場！】トヨタ 新型 ランドクルーザー FJ ついに出た！ 待望の末っ子はオフも本格派！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">25/10/20</td><td class="num nw">15:50</td><td class="num hi">142万</td><td class="num">11,040</td><td class="num">0.78%</td><td class="num">1,095</td></tr><tr><td class="num">12</td><td class="ttl"><a href="https://youtu.be/jOENGIawGC4" target="_blank" rel="noopener">【爆誕】センチュリー の 第３弾は クーペ !! 【JMS2025】</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">25/10/29</td><td class="num nw">12:48</td><td class="num hi">141万</td><td class="num">10,330</td><td class="num">0.73%</td><td class="num">1,101</td></tr><tr><td class="num">13</td><td class="ttl"><a href="https://youtu.be/hFG4GDdgBO4" target="_blank" rel="noopener">ソニー の 電気自動車 VISION-S を 河口まなぶ が徹底チェック！</a></td><td class="nw">LOVECARS!TV!</td><td class="num nw">20/9/18</td><td class="num nw">36:55</td><td class="num hi">138万</td><td class="num">7,782</td><td class="num">0.57%</td><td class="num">1,015</td></tr><tr><td class="num">14</td><td class="ttl"><a href="https://youtu.be/PqJ_TS9FdnQ" target="_blank" rel="noopener">【300万円の車選び対決!】ノートオーラvsヤリスクロス両方買って比較してみた!!</a></td><td class="nw">ワンソクTube</td><td class="num nw">21/11/27</td><td class="num nw">37:31</td><td class="num hi">135万</td><td class="num">3,918</td><td class="num">0.29%</td><td class="num">386</td></tr><tr><td class="num">15</td><td class="ttl"><a href="https://youtu.be/SHMZMUdIyWw" target="_blank" rel="noopener">【ルーミーvsソリオ比較対決!!】内装･サイズ･走り･後部座席 どっちが良いの?</a></td><td class="nw">ワンソクTube</td><td class="num nw">21/5/28</td><td class="num nw">33:28</td><td class="num hi">125万</td><td class="num">4,544</td><td class="num">0.36%</td><td class="num">501</td></tr><tr><td class="num">16</td><td class="ttl"><a href="https://youtu.be/GrPym3UdN3c" target="_blank" rel="noopener">トヨタ新型EV「bZ4X」がカッコいい!! 内装･外装など気になるポイントを詳細チェック!!</a></td><td class="nw">ワンソクTube</td><td class="num nw">21/4/19</td><td class="num nw">21:57</td><td class="num hi">122万</td><td class="num">3,109</td><td class="num">0.25%</td><td class="num">549</td></tr><tr><td class="num">17</td><td class="ttl"><a href="https://youtu.be/gj2BXVmPZL4" target="_blank" rel="noopener">【購入します!!】新型エルグランド内装･外装見てきた! アルファードを超える装備の数々に驚いた!</a></td><td class="nw">ワンソクTube</td><td class="num nw">25/10/29</td><td class="num nw">25:48</td><td class="num hi">120万</td><td class="num">5,843</td><td class="num">0.49%</td><td class="num">1,176</td></tr><tr><td class="num">18</td><td class="ttl"><a href="https://youtu.be/xEvHqDS0L4A" target="_blank" rel="noopener">【新型パジェロ購入します!】購入前5つの注意点まとめ! ランクル250や300と比較して徹底解説!</a></td><td class="nw">ワンソクTube</td><td class="num nw">26/9/4</td><td class="num nw">15:36</td><td class="num hi">118万</td><td class="num">5,187</td><td class="num">0.44%</td><td class="num">372</td></tr><tr><td class="num">19</td><td class="ttl"><a href="https://youtu.be/4h5TDBLF2xc" target="_blank" rel="noopener">【新型ハリアーのココがダメ！ 12のポイント】購入したオーナー目線で内装＆外装辛口評価！</a></td><td class="nw">ワンソクTube</td><td class="num nw">20/6/19</td><td class="num nw">20:37</td><td class="num hi">117万</td><td class="num">2,799</td><td class="num">0.24%</td><td class="num">940</td></tr><tr><td class="num">20</td><td class="ttl"><a href="https://youtu.be/zITbVORIoFI" target="_blank" rel="noopener">【内装これが本命】新型クラウンセダン見てきた! 内装･外装ココが×! ココが◎!</a></td><td class="nw">ワンソクTube</td><td class="num nw">23/10/7</td><td class="num nw">21:12</td><td class="num hi">115万</td><td class="num">9,798</td><td class="num">0.86%</td><td class="num">717</td></tr></tbody></table></div>
+<p>TOP20の尺の中央値は<b>22分</b>。LOVECARS!TV! 9本、ワンソクTube 9本、ハンバーグ師匠チャンネル 2本。トヨタ・レクサス車の動画が半数以上を占め、<b>新型発表の初日レポート</b>が上位に並びます。</p>
+<h3>ショート TOP10（ゆっくりダークネット）</h3>
+<div class="tw"><table class="st">
+<thead><tr><th data-t="n">#</th><th data-t="s">タイトル</th><th data-t="d">公開</th><th data-t="t">長さ</th><th data-t="m">視聴</th><th data-t="m">高評価</th><th data-t="p">高評価率</th><th data-t="m">コメント</th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="ttl"><a href="https://youtu.be/a1DDYoZOC4o" target="_blank" rel="noopener">新車7000kmで足回りが折れて、タイヤが凄いことになる自動車メーカーがあるらしい</a></td><td class="num nw">24/7/11</td><td class="num nw">0:59</td><td class="num hi">705万</td><td class="num">36,598</td><td class="num">0.52%</td><td class="num">751</td></tr><tr><td class="num">2</td><td class="ttl"><a href="https://youtu.be/ycafH2fuq5w" target="_blank" rel="noopener">10km走っただけでエンジンが壊れた理由</a></td><td class="num nw">24/7/15</td><td class="num nw">1:00</td><td class="num hi">497万</td><td class="num">31,238</td><td class="num">0.63%</td><td class="num">272</td></tr><tr><td class="num">3</td><td class="ttl"><a href="https://youtu.be/BEMt3BEoJwE" target="_blank" rel="noopener">テスラにHONDAのガソリン発電機を積んでる人の職質映像が草</a></td><td class="num nw">24/1/12</td><td class="num nw">0:40</td><td class="num hi">484万</td><td class="num">77,544</td><td class="num">1.60%</td><td class="num">2,745</td></tr><tr><td class="num">4</td><td class="ttl"><a href="https://youtu.be/CUYsH9IbxL4" target="_blank" rel="noopener">殺意のワンウェイスピードバンプ</a></td><td class="num nw">24/10/5</td><td class="num nw">0:28</td><td class="num hi">458万</td><td class="num">68,803</td><td class="num">1.50%</td><td class="num">992</td></tr><tr><td class="num">5</td><td class="ttl"><a href="https://youtu.be/ls0UsK5vJg4" target="_blank" rel="noopener">見栄でなく「中身」で選ぶオススメの型落ち高級車3選</a></td><td class="num nw">24/6/27</td><td class="num nw">1:00</td><td class="num hi">450万</td><td class="num">86,930</td><td class="num">1.93%</td><td class="num">715</td></tr><tr><td class="num">6</td><td class="ttl"><a href="https://youtu.be/RJXz-SzAHhE" target="_blank" rel="noopener">アルファードのイメージが悪化した理由</a></td><td class="num nw">24/9/10</td><td class="num nw">0:44</td><td class="num hi">435万</td><td class="num">40,773</td><td class="num">0.94%</td><td class="num">3,123</td></tr><tr><td class="num">7</td><td class="ttl"><a href="https://youtu.be/AnJcVGW4YPM" target="_blank" rel="noopener">クレーム「異音がする」→客が自分でベルト付けたせいだった #おバカな車屋シリーズ</a></td><td class="num nw">24/5/8</td><td class="num nw">0:56</td><td class="num hi">389万</td><td class="num">49,135</td><td class="num">1.26%</td><td class="num">370</td></tr><tr><td class="num">8</td><td class="ttl"><a href="https://youtu.be/h-PTOH2pnSA" target="_blank" rel="noopener">カーシェアを壊したセコすぎる利用法</a></td><td class="num nw">25/12/27</td><td class="num nw">0:48</td><td class="num hi">384万</td><td class="num">31,583</td><td class="num">0.82%</td><td class="num">487</td></tr><tr><td class="num">9</td><td class="ttl"><a href="https://youtu.be/WwVhYUFigYs" target="_blank" rel="noopener">「アクセルが全開にされる」というとんでもないリコール #テスラ #サイバートラック</a></td><td class="num nw">24/7/10</td><td class="num nw">0:12</td><td class="num hi">384万</td><td class="num">40,566</td><td class="num">1.06%</td><td class="num">813</td></tr><tr><td class="num">10</td><td class="ttl"><a href="https://youtu.be/xCgr4ZWYl40" target="_blank" rel="noopener">アメリカの車屋の客がバカすぎるwww #おバカな車屋シリーズ</a></td><td class="num nw">24/3/15</td><td class="num nw">0:41</td><td class="num hi">380万</td><td class="num">49,088</td><td class="num">1.29%</td><td class="num">608</td></tr></tbody></table></div>
+<p>ショートの最高は<b>705万回</b>。長尺の最高（207万回）の約3.4倍です。上位10本は<b>メーカーの不具合・整備現場の失敗談・中古車の地雷</b>など、「へぇ」と「やばい」で止まる題材に集中しています。</p>
+<p class="note">取得は各チャンネルの人気動画上位50本までのサンプルです（長尺：ワンソクTube、LOVECARS!TV!、ハンバーグ師匠チャンネル／ショート：ゆっくりダークネット）。ハンバーグ師匠はバイク企画が多いため、自動車企画のみ掲載しています。公開日・再生数は取得時点（2026/10/27）の値です。</p>
+</section>
+<section>
+<h2><span class="no">SECTION 06</span>勝ちパターンの型</h2>
+<p class="lead">再生上位の動画から抽出した、再現性のある企画の型。</p>
+<ol class="steps">
+<li><b>型1：「両方買って比較」の対決レビュー</b><br>《ノートオーラvsヤリスクロス》<b>134.7万回</b>（37分）、《ルーミーvsソリオ》<b>124.6万回</b>（33分）。実際に買った人だけが言える比較で、30分超の長尺でも再生が伸びています（ワンソクTube）。</li>
+<li><b>型2：新型発表・公開当日の一次情報</b><br>LOVECARS!TV!の《ランドクルーザーFJ》<b>142.3万回</b>、《センチュリー クーペ》<b>141.1万回</b>。新型パジェロは発表日（2026/9/2〜4）に3本が出揃い、LOVECARS 102.3万回、ワンソク 118.2万回・75.0万回と、<b>数日で75万〜118万回</b>に達しています。</li>
+<li><b>型3：「ココがダメ」の辛口オーナー視点</b><br>《新型ハリアーのココがダメ！12のポイント》<b>117.4万回</b>（コメント940）、《RAV4 13のダメなポイント》<b>109.5万回</b>（コメント777）。褒め一辺倒でない評価が100万回超を取っています。</li>
+<li><b>型4：「過去54台購入した中で」のランキング</b><br>《疲れない車ランキング》<b>175.6万回</b>は同チャンネルの長尺で最上位級。所有台数という実績が、ランキングの説得力になっています。</li>
+<li><b>型5：ショート特化 — 失敗・不具合・業界の裏側</b><br>ゆっくりダークネットはショート361本（1年）で<b>2.0億回</b>。ただし<b>登録者の1年増加率は+1.72%</b>（再生+41.2%）と、再生に対して登録が付いていません。</li>
+<li><b>反面教師：再生が出ても登録に繋がらない形</b><br>上位ショートには車以外の題材（広告CM・中華家電のネタ等）も混ざり、視聴者像が車好きに限定されません。<b>再生数だけを見ると成功に見える</b>ため、登録者増加率と分けて評価する必要があります。対照的に、ながら洗車は再生+103%に対し登録者+10.2%と、ショート比率が高くても登録が付いています。</li>
+</ol>
+</section>
+<section>
+<h2><span class="no">SECTION 07</span>小規模チャンネルでも伸びた動画</h2>
+<p class="lead">登録者5万人以下で、通常の約3〜70倍の再生を取った長尺動画。大手でなくても勝てる題材が見えます。</p>
+<div class="tw"><table class="st">
+<thead><tr><th data-t="n">#</th><th data-t="s">タイトル</th><th data-t="s">チャンネル</th><th data-t="m">登録者</th><th data-t="d">公開</th><th data-t="t">長さ</th><th data-t="m">視聴</th><th data-t="p">倍率</th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="ttl"><a href="https://youtu.be/c3bNP5lRrBE" target="_blank" rel="noopener">【衝撃】整備士が本気で選んだ「壊れにくい軽自動車」TOP10…10万キロ後も安心なのはコイツだ</a></td><td class="nw">奇妙なる世界</td><td class="num">1.76万人</td><td class="num nw">26/5/29</td><td class="num nw">15:16</td><td class="num hi">19.2万</td><td class="num">5.3倍</td></tr><tr><td class="num">2</td><td class="ttl"><a href="https://youtu.be/BAfTsCk67GQ" target="_blank" rel="noopener">【2026年度版 STEPWGN紹介】30周年特別仕様車も登場！優秀なミニバンの魅力を改めてご紹介します！</a></td><td class="nw">Honda Cars栃木東</td><td class="num">4.2万人</td><td class="num nw">26/7/10</td><td class="num nw">22:24</td><td class="num hi">18.6万</td><td class="num">5.5倍</td></tr><tr><td class="num">3</td><td class="ttl"><a href="https://youtu.be/1ioMFAbrhVc" target="_blank" rel="noopener">【激論】クラウンスポーツは本当に失敗作？「高級SUV」の物差しを捨てると化ける理由</a></td><td class="nw">元ベンツ営業</td><td class="num">4.53万人</td><td class="num nw">26/6/5</td><td class="num nw">17:28</td><td class="num hi">18.4万</td><td class="num">3.8倍</td></tr><tr><td class="num">4</td><td class="ttl"><a href="https://youtu.be/Os45DyQ34eM" target="_blank" rel="noopener">【スバル360魔改造】改造車が車検を受けた結果は？【旧車】＃78</a></td><td class="nw">バイクガレージライフ★工事さん</td><td class="num">2.95万人</td><td class="num nw">26/7/24</td><td class="num nw">16:26</td><td class="num hi">17.0万</td><td class="num">4.1倍</td></tr><tr><td class="num">5</td><td class="ttl"><a href="https://youtu.be/GkG_Vd2ylEc" target="_blank" rel="noopener">【常識逆転】高級SUVより快適！？60代からに選ばれている車TOP7！</a></td><td class="nw">奇妙なる世界</td><td class="num">1.76万人</td><td class="num nw">26/8/16</td><td class="num nw">11:40</td><td class="num hi">16.5万</td><td class="num">3.6倍</td></tr><tr><td class="num">6</td><td class="ttl"><a href="https://youtu.be/GcgIKuw4amY" target="_blank" rel="noopener">一度は乗ってるはず！TRD製コンフォートGT-Zは別物だった！【旧車】</a></td><td class="nw">KSファクトリー</td><td class="num">0.65万人</td><td class="num nw">26/10/16</td><td class="num nw">8:38</td><td class="num hi">12.2万</td><td class="num">35倍</td></tr><tr><td class="num">7</td><td class="ttl"><a href="https://youtu.be/z7vFBhVjRZc" target="_blank" rel="noopener">「セレナC26はやめておけ」は本当？中古車のプロが故障リスクと賢い選び方を徹底解説</a></td><td class="nw">ラインアップ菊池【ミニバン専門店】</td><td class="num">1.48万人</td><td class="num nw">26/10/17</td><td class="num nw">19:41</td><td class="num hi">9.8万</td><td class="num">4.6倍</td></tr><tr><td class="num">8</td><td class="ttl"><a href="https://youtu.be/OWtsxJFbi3M" target="_blank" rel="noopener">【新型エブリイワゴン】1ヶ月乗ってみた感想。良い点、悪い点お伝えしていきます。</a></td><td class="nw">the 車 ちゃんねる</td><td class="num">0.43万人</td><td class="num nw">26/7/19</td><td class="num nw">14:51</td><td class="num hi">9.2万</td><td class="num">4.8倍</td></tr><tr><td class="num">9</td><td class="ttl"><a href="https://youtu.be/WeFyQv5n3xc" target="_blank" rel="noopener">軽自動車最小 スズキツインを紹介します! 時代を先取りしすぎた車</a></td><td class="nw">Mikchey みっちーワークス</td><td class="num">2.99万人</td><td class="num nw">26/8/5</td><td class="num nw">5:33</td><td class="num hi">8.1万</td><td class="num">70倍</td></tr><tr><td class="num">10</td><td class="ttl"><a href="https://youtu.be/Zf4o_WeJ0nA" target="_blank" rel="noopener">【フリードクロスター】5人乗りのシートアレンジを全部やって見た。車中泊のシートセッティング</a></td><td class="nw">夢のスローライフチャンネル</td><td class="num">0.2万人</td><td class="num nw">26/6/17</td><td class="num nw">12:36</td><td class="num hi">6.9万</td><td class="num">4.8倍</td></tr><tr><td class="num">11</td><td class="ttl"><a href="https://youtu.be/sgj_aLdCCo4" target="_blank" rel="noopener">憧れのランクル250納車！2026年4月改良版 VXガソリン 33万円の値上げ改良箇所を徹底解説！</a></td><td class="nw">samuoアウトドア【登山と旅】</td><td class="num">0.19万人</td><td class="num nw">26/5/20</td><td class="num nw">12:34</td><td class="num hi">6.0万</td><td class="num">61倍</td></tr><tr><td class="num">12</td><td class="ttl"><a href="https://youtu.be/uKiQ6XQRKIY" target="_blank" rel="noopener">【2027年版】ハリアー購入前に知っておきたい5グレードの違い｜実車映像で解説</a></td><td class="nw">68-ch from Japan</td><td class="num">2.02万人</td><td class="num nw">26/10/1</td><td class="num nw">29:21</td><td class="num hi">5.4万</td><td class="num">2.6倍</td></tr><tr><td class="num">13</td><td class="ttl"><a href="https://youtu.be/faO8ZdCvusg" target="_blank" rel="noopener">新型ノア2026改良型 納車!(国内生産?台湾生産?) DIYキャンピングカーにして北海道一周車中泊旅へ</a></td><td class="nw">Minezoo channel</td><td class="num">0.65万人</td><td class="num nw">26/6/4</td><td class="num nw">8:29</td><td class="num hi">4.6万</td><td class="num">16倍</td></tr><tr><td class="num">14</td><td class="ttl"><a href="https://youtu.be/TNXHmg8-hbg" target="_blank" rel="noopener">【HONDAフリードHYBRID GP3】25万キロ故障なしの素晴らしい車‼️お別れします</a></td><td class="nw">ほまれとおれ【ほまちゃんねる】</td><td class="num">0.14万人</td><td class="num nw">26/5/2</td><td class="num nw">21:06</td><td class="num hi">1.6万</td><td class="num">38倍</td></tr></tbody></table></div>
+<p class="note">倍率＝その動画の再生数が、チャンネルの通常水準の何倍か（vidIQの breakout スコア）。過去6か月の長尺動画から、登録者5万人以下のチャンネルを抽出しました。</p>
+<ol class="steps">
+<li><b>「TOP10／TOP7」ランキング</b>：奇妙なる世界（登録1.76万人）が19万・16万回。整備士・60代といった<b>属性付きのランキング</b>です。</li>
+<li><b>「〜はやめておけ」の疑問形</b>：ミニバン専門店の《セレナC26》が登録1.48万人で9.8万回。販売現場の人が故障リスクを語る形です。</li>
+<li><b>旧車・珍車</b>：スズキツイン（70倍）、スバル360魔改造、コンフォートGT-Z（35倍）。大手が扱わない題材は、小規模でも伸びます。</li>
+<li><b>納車・1ヶ月乗った感想</b>：ランクル250納車（登録0.19万人で6万回・61倍）、エブリイワゴン、ノア。実際に買った人の一次情報です。</li>
+<li><b>ディーラー公式の車種紹介</b>：Honda Cars栃木東がステップワゴン紹介で18.6万回。購入検討者の検索に合った<b>車種名＋年式</b>のタイトルです。</li>
+</ol>
+</section>
+<section>
+<h2><span class="no">SECTION 08</span>今すぐ打つべき対策 5つ</h2>
+<p class="lead">公開データから言える示唆です。自チャンネルのStudioデータが入れば、さらに具体化できます。</p>
+<ol class="steps">
+<li><b>軸は「購入検討者向けの車種レビュー」に置く</b><br>ワンソクTubeは1年で長尺352本・ショート24本、再生8,830万回、登録者149万人。型1・2・3・4のすべてが「これから買う人」に向いた企画です。<b>実際に買った・乗った一次情報</b>を看板にしてください。</li>
+<li><b>新型・改良の発表日に、72時間以内に出す</b><br>新型パジェロは発表日（9/2）から2日以内にLOVECARS・ワンソクの3本が出て、いずれも現時点で75万回以上に達しています。発表スケジュールのカレンダー化と、撮影・編集を前倒しできる体制が必要です。</li>
+<li><b>長尺は15〜30分を基本にする</b><br>TOP20の尺の中央値は22分、主要チャンネルの長尺平均尺の中央値は約20分です。比較企画は33〜37分でも再生が出ており、尺で不利にはなりません。</li>
+<li><b>ショートは認知用、登録は長尺で取る設計にする</b><br>ショート特化のゆっくりダークネットは再生が大きい一方、登録者は伸びていません。ショートは長尺への導線と割り切り、評価指標は再生数ではなく<b>登録者増加数</b>で分けて見てください。</li>
+<li><b>小規模なら「車種×悩み」のニッチで入る</b><br>「やめておけ」「壊れにくい」「納車後」「旧車」「車中泊」など、登録1〜5万人でも通常の約3〜70倍を取った型があります。現場経験（整備・販売）がある人ほど有利です。</li>
+</ol>
+</section>
+<section>
+<h2><span class="no">SECTION 09</span>ベンチマークに推奨する5チャンネル</h2>
+<p class="lead">登録者10〜26万人で、直近1年の増加率が高いチャンネル。規模が近いぶん、施策を真似しやすい対象です。</p>
+<div class="tw"><table><thead><tr><th>#</th><th>チャンネル</th><th>参考にする理由</th></tr></thead><tbody><tr><td class="num">1</td><td class="ttl"><a href="https://www.youtube.com/@goodcarlifech" target="_blank" rel="noopener">GOOD CARLIFE / ゼミッタ</a></td><td>登録者+16.7%、再生+27.5%。長尺232本（1年）のみでショート0。ランクル・アクアなど所有車のレビューが中心で、型1・型4の参考になります。</td></tr><tr><td class="num">2</td><td class="ttl"><a href="https://www.youtube.com/@naoki_takahashi" target="_blank" rel="noopener">高橋巨樹のガレージライフ</a></td><td>登録者+16.0%、再生+30.4%。国家一級整備士の知識を、平均約10分の長尺と124本のショートで展開。現場の専門性で伸びる好例です。</td></tr><tr><td class="num">3</td><td class="ttl"><a href="https://www.youtube.com/@pitone0701" target="_blank" rel="noopener">ピットワン</a></td><td>登録者+12.1%、再生+33.2%。長尺112本（1年）。新車・中古車・整備・カスタムを扱う現場系で、登録26万人。</td></tr><tr><td class="num">4</td><td class="ttl"><a href="https://www.youtube.com/@cg-on-the-air" target="_blank" rel="noopener">CGオンエア</a></td><td>登録者+11.3%、再生+33.0%。雑誌発の週2回更新で、登録13万人の規模から安定して伸びています。</td></tr><tr><td class="num">5</td><td class="ttl"><a href="https://www.youtube.com/@kamitakechannel9456" target="_blank" rel="noopener">カミタケ チャンネル</a></td><td>登録者+9.4%、再生+29.9%。販売店が運営し、在庫を活かした全メーカーの忖度なしレビュー。登録16.3万人。</td></tr></tbody></table></div>
+</section>
+<section>
+<h2><span class="no">SECTION 10</span>取得できなかった指標と次の一手</h2>
+<p class="lead">公開データだけでは見えない部分と、完全版にするために必要なもの。</p>
+<p>参考レポート（整骨院版）の次の指標は、YouTube Studioの非公開データのため、他社チャンネルでは取得できませんでした。</p>
+<div class="tw"><table><thead><tr><th>参考レポートの項目</th><th>このレポートでの扱い</th></tr></thead><tbody>
+<tr><td>登録者の純増・動画別の登録獲得数</td><td>取得不可 → 登録者の1年増加率と、動画の再生・高評価・コメントで代替</td></tr>
+<tr><td>インプレッション・サムネイルCTR</td><td>取得不可 → 掲載なし</td></tr>
+<tr><td>オーガニック／広告の内訳</td><td>取得不可 → 掲載なし</td></tr>
+<tr><td>流入経路・検索キーワード</td><td>取得不可 → 掲載なし（vidIQのキーワード調査でも「新型車」は該当データなし）</td></tr>
+<tr><td>視聴者の年齢構成</td><td>取得不可 → 掲載なし</td></tr>
+<tr><td>視聴維持率カーブ</td><td>取得不可 → 掲載なし</td></tr>
+</tbody></table></div>
+<p class="note warn">vidIQに連携されているYouTubeチャンネル（淵上幸憲）は、登録者0人・動画0本のため、自チャンネルの分析は行っていません。</p>
+<p>分析対象とするチャンネルの<b>YouTube Studioデータ</b>（アナリティクスのエクスポート、またはスクリーンショット）をいただければ、参考レポートと同じ10セクションの完全版を作成できます。</p>
+</section>
+</main>
+<footer>ピュアグロース株式会社／vidIQ公開データより作成（2026年10月27日）</footer>
+<script>
+(function(){
+ var tbs=document.querySelectorAll('table.st');
+ function val(td,type){
+  var s=td.textContent.trim();
+  if(type==='s') return s;
+  if(type==='d'){var p=s.split('/');return p.length===3?(2000+ +p[0])*10000+(+p[1])*100+(+p[2]):0}
+  if(type==='t'){var q=s.split(':');return q.length===3?(+q[0])*3600+(+q[1])*60+(+q[2]):(+q[0])*60+(+q[1])}
+  if(type==='p'||type==='n') return parseFloat(s)||0;
+  var m=s.replace(/,/g,'');
+  if(m.indexOf('億')>=0) return parseFloat(m)*100000000;
+  if(m.indexOf('万')>=0) return parseFloat(m)*10000;
+  return parseFloat(m)||0;
+ }
+ Array.prototype.forEach.call(tbs,function(tb){
+  var ths=tb.querySelectorAll('thead th'), tbody=tb.querySelector('tbody');
+  Array.prototype.forEach.call(ths,function(th,i){
+   th.addEventListener('click',function(){
+    var type=th.getAttribute('data-t')||'m';
+    var asc=!th.classList.contains('asc');
+    Array.prototype.forEach.call(ths,function(o){o.classList.remove('asc','desc')});
+    th.classList.add(asc?'asc':'desc');
+    var rows=Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+    rows.sort(function(a,b){
+     var x=val(a.cells[i],type), y=val(b.cells[i],type);
+     if(type==='s') return asc? String(x).localeCompare(String(y),'ja') : String(y).localeCompare(String(x),'ja');
+     return asc? x-y : y-x;
+    });
+    rows.forEach(function(r){tbody.appendChild(r)});
+   });
+  });
+ });
+})();
+</script>
+</body></html>
